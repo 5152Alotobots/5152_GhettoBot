@@ -8,14 +8,15 @@ import java.util.function.DoubleSupplier;
 
 
 import frc.robot.subsystems.elevator.ElevatorSubsystem;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 
 /* You should consider using the more terse Command factories API instead https://docs.wpilib.org/en/stable/docs/software/commandbased/organizing-command-based.html#defining-commands */
-public class DefaultCommand extends Command {
+public class DefaultElevatorCommand extends Command {
   private ElevatorSubsystem elevatorSubsystem;
   private DoubleSupplier input;
   /** Creates a new DefaultCommand. */
-  public DefaultCommand(ElevatorSubsystem elevatorSubsystem, DoubleSupplier input) {
+  public DefaultElevatorCommand(ElevatorSubsystem elevatorSubsystem, DoubleSupplier input) {
     this.elevatorSubsystem = elevatorSubsystem;
     this.input = input;
     //Motor Configs
@@ -32,7 +33,8 @@ public class DefaultCommand extends Command {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    elevatorSubsystem.setMotors(input.getAsDouble());
+    SmartDashboard.putNumber("Elevator In", input.getAsDouble());
+    //elevatorSubsystem.setMotors(input.getAsDouble());
   }
 
   // Called once the command ends or is interrupted.

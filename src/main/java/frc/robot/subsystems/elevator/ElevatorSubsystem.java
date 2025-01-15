@@ -10,7 +10,7 @@ import frc.robot.subsystems.elevator.constants.ElevatorConstants;
 
 public class ElevatorSubsystem extends SubsystemBase {
     private TalonSRX motorOne = new TalonSRX(ElevatorConstants.MOTOR_ONE_ID);
-    private TalonSRX motorTwo = new TalonSRX(ElevatorConstants.MOTOR_TWO_ID);
+   // private TalonSRX motorTwo = new TalonSRX(ElevatorConstants.MOTOR_TWO_ID);
     public ElevatorSubsystem() {
         var config = new TalonSRXConfiguration();
         config.openloopRamp = ElevatorConstants.OPEN_LOOP_MAX;
@@ -19,11 +19,11 @@ public class ElevatorSubsystem extends SubsystemBase {
         config.peakOutputReverse = ElevatorConstants.OPEN_LOOP_MAX_REVERSE;
                
         motorOne.configAllSettings(config);
-        motorTwo.configAllSettings(config);
+       // motorTwo.configAllSettings(config);
 
-        motorTwo.follow(motorOne);
+      //  motorTwo.follow(motorOne);
         motorOne.setInverted(false);
-        motorTwo.setInverted(InvertType.FollowMaster);
+      //  motorTwo.setInverted(InvertType.FollowMaster);
     }
 
     public void setMotors(double speed) {
