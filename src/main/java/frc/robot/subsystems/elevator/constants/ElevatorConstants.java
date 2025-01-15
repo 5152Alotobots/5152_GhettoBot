@@ -3,6 +3,8 @@ package frc.robot.subsystems.elevator.constants;
 public final class ElevatorConstants {
     public static final int MOTOR_ONE_ID = 10;
     public static final int MOTOR_TWO_ID = 11;
+    public static final int DOWN_SWITCH_ID = 0;
+    public static final int UP_SWITCH_ID = 1;
 
     //Time to get to max speed in seconds
     public static final double OPEN_LOOP_RAMP = 2;
