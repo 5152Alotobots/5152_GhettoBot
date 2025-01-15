@@ -19,6 +19,7 @@ import frc.robot.Constants.AutoConstants;
 import frc.robot.Constants.DriveConstants;
 import frc.robot.Constants.OIConstants;
 import frc.robot.subsystems.DriveSubsystem;
+import frc.robot.subsystems.coralIntake.CoralIntakeSubsystem;
 import frc.robot.subsystems.elevator.ElevatorSubsystem;
 import frc.robot.subsystems.elevator.commands.DefaultElevatorCommand;
 import edu.wpi.first.wpilibj2.command.Command;
@@ -39,6 +40,7 @@ public class RobotContainer {
   // The robot's subsystems
   private final DriveSubsystem driveSubsystem = new DriveSubsystem();
   private final ElevatorSubsystem elevatorSubsystem = new ElevatorSubsystem();
+  private final CoralIntakeSubsystem coralIntakeSubsystem = new CoralIntakeSubsystem();
 
   // The driver's controller
   private final XboxController driverController = new XboxController(OIConstants.DRIVER_CONTROLLER_PORT);
@@ -67,6 +69,7 @@ public class RobotContainer {
     new JoystickButton(driverController, Button.kRightBumper.value)
         .onTrue(new InstantCommand(() -> driveSubsystem.setMaxOutput(0.5)))
         .onFalse(new InstantCommand(() -> driveSubsystem.setMaxOutput(1)));
+    new JoystickButton(auxController, Button.kA.value).whileTrue(coralIntakeSubsystem.CoralIntake());
   }
 
   /**

@@ -16,7 +16,6 @@ public class ElevatorSubsystem extends SubsystemBase {
 //    private TalonSRX motorTwo = new TalonSRX(ElevatorConstants.MOTOR_TWO_ID);
     public ElevatorSubsystem() {
         var config = new TalonSRXConfiguration();
-        config.openloopRamp = ElevatorConstants.OPEN_LOOP_MAX;
         config.openloopRamp = ElevatorConstants.OPEN_LOOP_RAMP;
         config.peakOutputForward = ElevatorConstants.OPEN_LOOP_MAX;
         config.peakOutputReverse = ElevatorConstants.OPEN_LOOP_MAX_REVERSE;
