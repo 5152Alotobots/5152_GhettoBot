@@ -4,6 +4,7 @@
 
 package frc.robot;
 
+import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.controller.ProfiledPIDController;
 import edu.wpi.first.math.geometry.Pose2d;
@@ -52,16 +53,16 @@ public class RobotContainer {
     configureButtonBindings();
 
     // Configure default commands
-    driveSubsystem.setDefaultCommand(
-        new RunCommand(
-            () -> driveSubsystem.drive(
-                -driverController.getLeftY(),
-                -driverController.getRightX(),
-                -driverController.getLeftX(),
-                false),
-            driveSubsystem));
+    // driveSubsystem.setDefaultCommand(
+    //     new RunCommand(
+    //         () -> driveSubsystem.drive(
+    //             -driverController.getLeftY(),
+    //             -driverController.getRightX(),
+    //             -driverController.getLeftX(),
+    //             false),
+    //         driveSubsystem));
     elevatorSubsystem.setDefaultCommand(
-      new DefaultElevatorCommand(elevatorSubsystem, () -> auxController.getLeftY()));
+      new DefaultElevatorCommand(elevatorSubsystem, () -> MathUtil.applyDeadband(auxController.getLeftY(), .1)));
   }
 
   private void configureButtonBindings() {
@@ -69,7 +70,7 @@ public class RobotContainer {
     new JoystickButton(driverController, Button.kRightBumper.value)
         .onTrue(new InstantCommand(() -> driveSubsystem.setMaxOutput(0.5)))
         .onFalse(new InstantCommand(() -> driveSubsystem.setMaxOutput(1)));
-    new JoystickButton(auxController, Button.kA.value).whileTrue(coralIntakeSubsystem.CoralIntake());
+    //new JoystickButton(auxController, Button.kA.value).whileTrue(coralIntakeSubsystem.CoralIntake());
   }
 
   /**
