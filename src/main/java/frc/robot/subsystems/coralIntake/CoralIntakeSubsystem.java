@@ -33,15 +33,35 @@ public class CoralIntakeSubsystem extends SubsystemBase {
     motorOne.set(ControlMode.PercentOutput, speed);
   }
 
-  public Command CoralIntake() {
+  public void setMotorsWithLimit(double speed) {
+    if (getSensorState()) {
+      motorOne.set(ControlMode.PercentOutput, Math.min(speed, 0));
+    } else {
+      motorOne.set(ControlMode.PercentOutput, speed);
+    }
+  }
+
+  public Command coralIntake() {
     return this.startEnd(() -> setMotors(.2), () -> setMotors(0));
   }
 
-  public Command CoralIntakeFast() {
+  public Command coralIntakeFast() {
     return this.startEnd(() -> setMotors(.5), () -> setMotors(0));
   }
 
-  public Command CoralIntakeOut() {
+  public Command coralIntakeOut() {
     return this.startEnd(() -> setMotors(-.2), () -> setMotors(0));
+  }
+  
+  public Command coralIntakeWithLimit() {
+    return this.startEnd(() -> setMotorsWithLimit(.2), () -> setMotorsWithLimit(0));
+  }
+
+  public Command coralIntakeFastWithLimit() {
+    return this.startEnd(() -> setMotorsWithLimit(.5), () -> setMotorsWithLimit(0));
+  }
+
+  public Command coralIntakeOutWithLimit() {
+    return this.startEnd(() -> setMotorsWithLimit(-.2), () -> setMotorsWithLimit(0));
   }
 }

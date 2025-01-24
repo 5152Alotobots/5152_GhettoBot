@@ -53,14 +53,15 @@ public class RobotContainer {
     configureButtonBindings();
 
     // Configure default commands
-    // driveSubsystem.setDefaultCommand(
-    //     new RunCommand(
-    //         () -> driveSubsystem.drive(
-    //             -driverController.getLeftY(),
-    //             -driverController.getRightX(),
-    //             -driverController.getLeftX(),
-    //             false),
-    //         driveSubsystem));
+    driveSubsystem.setDefaultCommand(
+        new RunCommand(
+            () -> driveSubsystem.drive(
+                -driverController.getLeftY(),
+                -driverController.getRightX(),
+                -driverController.getLeftX(),
+                false),
+            driveSubsystem));
+
     elevatorSubsystem.setDefaultCommand(
       new DefaultElevatorCommand(elevatorSubsystem, () -> MathUtil.applyDeadband(auxController.getLeftY(), .1)));
   }
@@ -70,7 +71,10 @@ public class RobotContainer {
     new JoystickButton(driverController, Button.kRightBumper.value)
         .onTrue(new InstantCommand(() -> driveSubsystem.setMaxOutput(0.5)))
         .onFalse(new InstantCommand(() -> driveSubsystem.setMaxOutput(1)));
-    //new JoystickButton(auxController, Button.kA.value).whileTrue(coralIntakeSubsystem.CoralIntake());
+
+    new JoystickButton(auxController, Button.kA.value).whileTrue(coralIntakeSubsystem.coralIntake());
+    new JoystickButton(auxController, Button.kB.value).whileTrue(coralIntakeSubsystem.coralIntakeFast());
+    new JoystickButton(auxController, Button.kY.value).whileTrue(coralIntakeSubsystem.coralIntakeOut());
   }
 
   /**
