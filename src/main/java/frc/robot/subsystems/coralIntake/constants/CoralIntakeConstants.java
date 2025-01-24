@@ -6,5 +6,5 @@ public class CoralIntakeConstants {
   public static final int SENSOR_ID = 13;
   public static final double OPEN_LOOP_MAX = .5;
   public static final double OPEN_LOOP_MAX_REVERSE = -.5;
-  public static final double OPEN_LOOP_RAMP = 2;
+  public static final double OPEN_LOOP_RAMP = 0.0;
 }

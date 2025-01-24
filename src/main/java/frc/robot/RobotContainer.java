@@ -39,7 +39,7 @@ import java.util.List;
  */
 public class RobotContainer {
   // The robot's subsystems
-  private final DriveSubsystem driveSubsystem = new DriveSubsystem();
+  //private final DriveSubsystem driveSubsystem = new DriveSubsystem();
   private final ElevatorSubsystem elevatorSubsystem = new ElevatorSubsystem();
   private final CoralIntakeSubsystem coralIntakeSubsystem = new CoralIntakeSubsystem();
 
@@ -53,14 +53,14 @@ public class RobotContainer {
     configureButtonBindings();
 
     // Configure default commands
-    driveSubsystem.setDefaultCommand(
-        new RunCommand(
-            () -> driveSubsystem.drive(
-                -driverController.getLeftY(),
-                -driverController.getRightX(),
-                -driverController.getLeftX(),
-                false),
-            driveSubsystem));
+    // driveSubsystem.setDefaultCommand(
+    //     new RunCommand(
+    //         () -> driveSubsystem.drive(
+    //             -driverController.getLeftY(),
+    //             -driverController.getRightX(),
+    //             -driverController.getLeftX(),
+    //             false),
+    //         driveSubsystem));
 
     elevatorSubsystem.setDefaultCommand(
       new DefaultElevatorCommand(elevatorSubsystem, () -> MathUtil.applyDeadband(auxController.getLeftY(), .1)));
@@ -68,13 +68,14 @@ public class RobotContainer {
 
   private void configureButtonBindings() {
     // Drive at half speed when the right bumper is held
-    new JoystickButton(driverController, Button.kRightBumper.value)
-        .onTrue(new InstantCommand(() -> driveSubsystem.setMaxOutput(0.5)))
-        .onFalse(new InstantCommand(() -> driveSubsystem.setMaxOutput(1)));
+    // new JoystickButton(driverController, Button.kRightBumper.value)
+    //     .onTrue(new InstantCommand(() -> driveSubsystem.setMaxOutput(0.5)))
+    //     .onFalse(new InstantCommand(() -> driveSubsystem.setMaxOutput(1)));
 
-    new JoystickButton(auxController, Button.kA.value).whileTrue(coralIntakeSubsystem.coralIntake());
     new JoystickButton(auxController, Button.kB.value).whileTrue(coralIntakeSubsystem.coralIntakeFast());
-    new JoystickButton(auxController, Button.kY.value).whileTrue(coralIntakeSubsystem.coralIntakeOut());
+    new JoystickButton(auxController, Button.kA.value).whileTrue(coralIntakeSubsystem.coralIntakeFastWithLimit());
+    // new JoystickButton(auxController, Button.kX.value).whileTrue(coralIntakeSubsystem.coralIntakeTrough());
+  //  new JoystickButton(auxController, Button.kY.value).whileTrue(coralIntakeSubsystem.coralIntakeOut());
   }
 
   /**
