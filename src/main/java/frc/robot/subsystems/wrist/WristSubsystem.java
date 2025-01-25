@@ -11,12 +11,16 @@ import com.ctre.phoenix6.controls.PositionTorqueCurrentFOC;
 import com.ctre.phoenix6.controls.PositionVoltage;
 import com.ctre.phoenix6.hardware.ParentDevice;
 import com.ctre.phoenix6.hardware.TalonFX;
+import com.ctre.phoenix6.signals.ForwardLimitTypeValue;
+import com.ctre.phoenix6.signals.NeutralModeValue;
+import com.ctre.phoenix6.signals.ReverseLimitTypeValue;
 
 import edu.wpi.first.math.filter.Debouncer;
 import edu.wpi.first.units.measure.Angle;
 import edu.wpi.first.units.measure.AngularVelocity;
 import edu.wpi.first.units.measure.Current;
 import edu.wpi.first.units.measure.Voltage;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.subsystems.wrist.constants.WristConstants;
 
@@ -35,6 +39,9 @@ public class WristSubsystem extends SubsystemBase {
    private final StatusSignal<Angle> wristPosition;
    private final StatusSignal<Boolean> topSoftLimit;
    private final StatusSignal<Boolean> bottomSoftLimit;
+   private final StatusSignal<Boolean> topLimit;
+   private final StatusSignal<Boolean> bottomLimit;
+
 
    public WristSubsystem() {
       wristMotor = new TalonFX(WristConstants.WRIST_MOTOR_ID);
@@ -48,7 +55,12 @@ public class WristSubsystem extends SubsystemBase {
       positionSlot.kD = 0.0;
       
       config.Slot0 = positionSlot;
-
+      config.Feedback.SensorToMechanismRatio = 139;
+      config.MotorOutput.NeutralMode = NeutralModeValue.Brake;
+      config.HardwareLimitSwitch.ForwardLimitEnable = true;
+      config.HardwareLimitSwitch.ReverseLimitEnable = true;
+      config.HardwareLimitSwitch.ForwardLimitType = ForwardLimitTypeValue.NormallyOpen;
+      config.HardwareLimitSwitch.ReverseLimitType = ReverseLimitTypeValue.NormallyOpen;
       // Apply config wrist
       wristMotor.getConfigurator().apply(config, 0.25);
 
@@ -59,6 +71,8 @@ public class WristSubsystem extends SubsystemBase {
       wristPosition = wristMotor.getPosition();
       topSoftLimit = wristMotor.getFault_ForwardSoftLimit();
       bottomSoftLimit = wristMotor.getFault_ReverseSoftLimit();
+      topLimit = wristMotor.getFault_ForwardHardLimit();
+      bottomLimit = wristMotor.getFault_ReverseHardLimit();
 
       BaseStatusSignal.setUpdateFrequencyForAll(
             50,
@@ -68,7 +82,9 @@ public class WristSubsystem extends SubsystemBase {
             wristVelocity,
             wristPosition,
             topSoftLimit,
-            bottomSoftLimit);
+            bottomSoftLimit,
+            topLimit,
+            bottomLimit);
 
       ParentDevice.optimizeBusUtilizationForAll(wristMotor);
    }
@@ -82,7 +98,12 @@ public class WristSubsystem extends SubsystemBase {
             wristVelocity,
             wristPosition,
             topSoftLimit,
-            bottomSoftLimit);
+            bottomSoftLimit,
+            topLimit,
+            bottomLimit);
+         
+      SmartDashboard.putBoolean("Top-Limit", topLimit.getValue());
+      SmartDashboard.putBoolean("Bottom-Limit", bottomLimit.getValue());
    }
 
     public void setWristPositionVoltage(Angle rotation, int pidSlot) {

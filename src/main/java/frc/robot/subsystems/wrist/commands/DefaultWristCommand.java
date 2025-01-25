@@ -2,25 +2,26 @@
 // Open Source Software; you can modify and/or share it under the terms of
 // the WPILib BSD license file in the root directory of this project.
 
-package frc.robot.subsystems.elevator.commands;
+package frc.robot.subsystems.wrist.commands;
 
 import java.util.function.DoubleSupplier;
 
-import frc.robot.subsystems.elevator.ElevatorSubsystem;
+
+import frc.robot.subsystems.wrist.WristSubsystem;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 
 /* You should consider using the more terse Command factories API instead https://docs.wpilib.org/en/stable/docs/software/commandbased/organizing-command-based.html#defining-commands */
-public class DefaultElevatorCommand extends Command {
-  private ElevatorSubsystem elevatorSubsystem;
+public class DefaultWristCommand extends Command {
+  private WristSubsystem wristSubsystem;
   private DoubleSupplier input;
   /** Creates a new DefaultCommand. */
-  public DefaultElevatorCommand(ElevatorSubsystem elevatorSubsystem, DoubleSupplier input) {
-    this.elevatorSubsystem = elevatorSubsystem;
+  public DefaultWristCommand(WristSubsystem wristSubsystem, DoubleSupplier input) {
+    this.wristSubsystem = wristSubsystem;
     this.input = input;
     //Motor Configs
     // Use addRequirements() here to declare subsystem dependencies.
-    addRequirements(elevatorSubsystem);
+    addRequirements(wristSubsystem);
   }
 
   // Called when the command is initially scheduled.
@@ -32,13 +33,13 @@ public class DefaultElevatorCommand extends Command {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    elevatorSubsystem.setMotorsWithLimits(input.getAsDouble());
+    wristSubsystem.setWristOpenLoop(input.getAsDouble());
   }
 
   // Called once the command ends or is interrupted.
   @Override
   public void end(boolean interrupted) {
-    elevatorSubsystem.setMotors(0);
+    wristSubsystem.setWristOpenLoop(0);
   }
 
   // Returns true when the command should end.

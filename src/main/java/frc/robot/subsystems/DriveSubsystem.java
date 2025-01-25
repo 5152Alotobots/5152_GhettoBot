@@ -5,7 +5,9 @@
 package frc.robot.subsystems;
 
 import com.ctre.phoenix.motorcontrol.TalonSRXControlMode;
+import com.ctre.phoenix.motorcontrol.VictorSPXControlMode;
 import com.ctre.phoenix.motorcontrol.can.TalonSRX;
+import com.ctre.phoenix.motorcontrol.can.VictorSPX;
 
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.kinematics.MecanumDriveOdometry;
@@ -20,19 +22,20 @@ import edu.wpi.first.wpilibj.motorcontrol.PWMSparkMax;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
 public class DriveSubsystem extends SubsystemBase {
-  private final TalonSRX frontLeft = new TalonSRX(DriveConstants.kFrontLeftMotorPort);
-  private final TalonSRX frontRight = new TalonSRX(DriveConstants.kFrontLeftMotorPort);
-  private final TalonSRX rearLeft = new TalonSRX(DriveConstants.kFrontLeftMotorPort);
-  private final TalonSRX rearRight = new TalonSRX(DriveConstants.kFrontLeftMotorPort);
+  private final VictorSPX frontLeft = new VictorSPX(DriveConstants.kFrontLeftMotorPort);
+  private final VictorSPX frontRight = new VictorSPX(DriveConstants.kFrontRightMotorPort);
+  private final VictorSPX rearLeft = new VictorSPX(DriveConstants.kRearLeftMotorPort);
+  private final VictorSPX rearRight = new VictorSPX(DriveConstants.kRearRightMotorPort);
 
-  private void runMotor(TalonSRX motor, double output) {
-    motor.set(TalonSRXControlMode.PercentOutput, output);
+
+  private void runMotor(VictorSPX motor, double output) {
+    motor.set(VictorSPXControlMode.PercentOutput, output);
   }
 
   private final MecanumDrive m_drive = new MecanumDrive(
     (output) -> runMotor(frontLeft, output),
-    (output) -> runMotor(frontRight, output),
     (output) -> runMotor(rearLeft, output),
+    (output) -> runMotor(frontRight, output),
     (output) -> runMotor(rearRight, output));
 
   /*  
@@ -76,6 +79,7 @@ public class DriveSubsystem extends SubsystemBase {
 */
   /** Creates a new DriveSubsystem. */
   public DriveSubsystem() {
+
     SendableRegistry.addChild(m_drive, frontLeft);
     SendableRegistry.addChild(m_drive, rearLeft);
     SendableRegistry.addChild(m_drive, frontRight);
@@ -89,8 +93,8 @@ public class DriveSubsystem extends SubsystemBase {
     // // We need to invert one side of the drivetrain so that positive voltages
     // result in both sides moving forward. Depending on how your robot's
     // gearbox is constructed, you might have to invert the left side instead.
-    frontRight.setInverted(true);
-    rearRight.setInverted(true);
+    //frontRight.setInverted(true);
+    rearLeft.setInverted(true);
   }
 
   @Override

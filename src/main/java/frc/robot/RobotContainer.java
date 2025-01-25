@@ -23,6 +23,8 @@ import frc.robot.subsystems.DriveSubsystem;
 import frc.robot.subsystems.coralIntake.CoralIntakeSubsystem;
 import frc.robot.subsystems.elevator.ElevatorSubsystem;
 import frc.robot.subsystems.elevator.commands.DefaultElevatorCommand;
+import frc.robot.subsystems.wrist.WristSubsystem;
+import frc.robot.subsystems.wrist.commands.DefaultWristCommand;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
@@ -39,9 +41,10 @@ import java.util.List;
  */
 public class RobotContainer {
   // The robot's subsystems
-  //private final DriveSubsystem driveSubsystem = new DriveSubsystem();
+  private final DriveSubsystem driveSubsystem = new DriveSubsystem();
   private final ElevatorSubsystem elevatorSubsystem = new ElevatorSubsystem();
   private final CoralIntakeSubsystem coralIntakeSubsystem = new CoralIntakeSubsystem();
+  private final WristSubsystem wristSubsystem = new WristSubsystem();
 
   // The driver's controller
   private final XboxController driverController = new XboxController(OIConstants.DRIVER_CONTROLLER_PORT);
@@ -53,24 +56,26 @@ public class RobotContainer {
     configureButtonBindings();
 
     // Configure default commands
-    // driveSubsystem.setDefaultCommand(
-    //     new RunCommand(
-    //         () -> driveSubsystem.drive(
-    //             -driverController.getLeftY(),
-    //             -driverController.getRightX(),
-    //             -driverController.getLeftX(),
-    //             false),
-    //         driveSubsystem));
+    driveSubsystem.setDefaultCommand(
+        new RunCommand(
+            () -> driveSubsystem.drive(
+                driverController.getLeftY(),
+                driverController.getLeftX(),
+                driverController.getRightX(),
+                false),
+            driveSubsystem));
 
     elevatorSubsystem.setDefaultCommand(
       new DefaultElevatorCommand(elevatorSubsystem, () -> MathUtil.applyDeadband(auxController.getLeftY(), .1)));
+    wristSubsystem.setDefaultCommand(
+      new DefaultWristCommand(wristSubsystem, () -> MathUtil.applyDeadband(auxController.getRightY(), .1)));
   }
 
   private void configureButtonBindings() {
     // Drive at half speed when the right bumper is held
-    // new JoystickButton(driverController, Button.kRightBumper.value)
-    //     .onTrue(new InstantCommand(() -> driveSubsystem.setMaxOutput(0.5)))
-    //     .onFalse(new InstantCommand(() -> driveSubsystem.setMaxOutput(1)));
+    new JoystickButton(driverController, Button.kRightBumper.value)
+        .onTrue(new InstantCommand(() -> driveSubsystem.setMaxOutput(0.5)))
+        .onFalse(new InstantCommand(() -> driveSubsystem.setMaxOutput(1)));
 
     new JoystickButton(auxController, Button.kB.value).whileTrue(coralIntakeSubsystem.coralIntakeFast());
     new JoystickButton(auxController, Button.kA.value).whileTrue(coralIntakeSubsystem.coralIntakeFastWithLimit());
