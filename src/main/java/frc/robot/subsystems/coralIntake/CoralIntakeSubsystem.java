@@ -16,7 +16,7 @@ public class CoralIntakeSubsystem extends SubsystemBase {
   private final TalonSRX motorOne = new TalonSRX(CoralIntakeConstants.MOTOR_ONE_ID);
   private final CANrange intakeSensor = new CANrange(CoralIntakeConstants.SENSOR_ID);
 
-  private StatusSignal<Boolean> intakeOcc = intakeSensor.getIsDetected();
+  private final StatusSignal<Boolean> intakeOccupied = intakeSensor.getIsDetected();
   public CoralIntakeSubsystem() {
     var config = new TalonSRXConfiguration();
     config.openloopRamp = CoralIntakeConstants.OPEN_LOOP_RAMP;
@@ -29,8 +29,8 @@ public class CoralIntakeSubsystem extends SubsystemBase {
   }
 
   public boolean getSensorState() {
-    BaseStatusSignal.refreshAll(intakeOcc);
-    return intakeOcc.getValue();
+    BaseStatusSignal.refreshAll(intakeOccupied);
+    return intakeOccupied.getValue();
   }
 
   public void setMotors(double speed) {
@@ -38,7 +38,6 @@ public class CoralIntakeSubsystem extends SubsystemBase {
   }
 
   public void setMotorsWithLimit(double speed) {
-    SmartDashboard.putBoolean("Sensed", getSensorState());
     if (getSensorState()) {
       motorOne.set(ControlMode.PercentOutput, Math.min(speed, 0));
     } else {

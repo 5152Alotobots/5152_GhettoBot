@@ -2,6 +2,7 @@ package frc.robot.subsystems.elevator;
 
 import com.ctre.phoenix.motorcontrol.ControlMode;
 import com.ctre.phoenix.motorcontrol.InvertType;
+import com.ctre.phoenix.motorcontrol.NeutralMode;
 import com.ctre.phoenix.motorcontrol.can.TalonSRX;
 import com.ctre.phoenix.motorcontrol.can.TalonSRXConfiguration;
 
@@ -14,7 +15,7 @@ public class ElevatorSubsystem extends SubsystemBase {
     private final TalonSRX motorOne = new TalonSRX(ElevatorConstants.MOTOR_ONE_ID);
     private final DigitalInput downSensor = new DigitalInput(ElevatorConstants.DOWN_SWITCH_ID);
     private final DigitalInput upSensor = new DigitalInput(ElevatorConstants.UP_SWITCH_ID);
-//    private TalonSRX motorTwo = new TalonSRX(ElevatorConstants.MOTOR_TWO_ID);
+
     public ElevatorSubsystem() {
         var config = new TalonSRXConfiguration();
         config.openloopRamp = ElevatorConstants.OPEN_LOOP_RAMP;
@@ -22,11 +23,8 @@ public class ElevatorSubsystem extends SubsystemBase {
         config.peakOutputReverse = ElevatorConstants.OPEN_LOOP_MAX_REVERSE;
                
         motorOne.configAllSettings(config);
-//        motorTwo.configAllSettings(config);
-
-//        motorTwo.follow(motorOne);
+        motorOne.setNeutralMode(NeutralMode.Brake);
         motorOne.setInverted(false);
-//        motorTwo.setInverted(InvertType.FollowMaster);
     }
 
     public void setMotors(double speed) {

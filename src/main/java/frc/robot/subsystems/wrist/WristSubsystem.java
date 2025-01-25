@@ -53,8 +53,11 @@ public class WristSubsystem extends SubsystemBase {
       positionSlot.kP = 0.0;
       positionSlot.kI = 0.0;
       positionSlot.kD = 0.0;
-      
+
+
       config.Slot0 = positionSlot;
+      config.OpenLoopRamps.DutyCycleOpenLoopRampPeriod = 0.5;
+      config.OpenLoopRamps.VoltageOpenLoopRampPeriod = 0.5;
       config.Feedback.SensorToMechanismRatio = 139;
       config.MotorOutput.NeutralMode = NeutralModeValue.Brake;
       config.HardwareLimitSwitch.ForwardLimitEnable = true;
